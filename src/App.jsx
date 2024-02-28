@@ -12,27 +12,30 @@ const App = () => {
     const name = event.target.name.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
+    const cover = event.target.cover.files[0];
     const photos = event.target.photo.files;
     // console.log(name, email, password, photo);
     const user = { name, email, password }
     // console.log(user)
 
-    // const formData = new FormData();
-    // formData.append('image', photo);
+    // Single Image Upload 
+    const formData = new FormData();
+    formData.append('image', cover);
 
-    // fetch(imageHosting, {
-    //   method: 'POST',
-    //   body: formData
-    // })
-    // .then(res => res.json())
-    // .then(resData => {
-    //   console.log(resData)
-    //   if(resData.success) {
-    //     console.log(resData.data.display_url);
-    //     user.image = resData.data.display_url;
-    //   }
-    // })
+    fetch(imageHosting, {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(resData => {
+      console.log(resData)
+      if(resData.success) {
+        console.log(resData.data.display_url);
+        user.coverImage = resData.data.display_url;
+      }
+    })
 
+    // Multiple Image Upload 
     const uploadPromises = [];
 
     for (let i = 0; i < photos.length; i++) {
@@ -76,7 +79,9 @@ const App = () => {
         <input type="email" name='email' /> <br /> <br />
         <label ><b>Password</b></label><br />
         <input type="password" name='password' /> <br /> <br />
-        <label ><b>Photo</b></label><br />
+        <label ><b>Cover Image</b></label><br />
+        <input type="file" name='cover' /> <br /> <br />
+        <label ><b>Photos Galary</b></label><br />
         <input type="file" name='photo' multiple /> <br /> <br />
         <input type="submit" value="Submit" />
       </form>
